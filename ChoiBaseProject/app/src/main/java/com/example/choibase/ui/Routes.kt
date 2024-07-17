@@ -1,4 +1,4 @@
-package com.example.choibaseproject.com.example.choibaseproject.ui
+package com.example.choibaseproject.ui
 
 open class Routes(val route: String) {
     data object Splash : Routes("splash")

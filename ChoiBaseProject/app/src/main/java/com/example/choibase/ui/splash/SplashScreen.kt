@@ -1,4 +1,4 @@
-package com.example.choibaseproject.com.example.choibaseproject.ui.splash
+package com.example.choibaseproject.ui.splash
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -9,9 +9,8 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.semantics.SemanticsProperties.Text
 import androidx.navigation.NavHostController
-import com.example.choibaseproject.com.example.choibaseproject.ui.Routes
+import com.example.choibaseproject.ui.Routes
 import kotlinx.coroutines.delay
 
 @Composable
