@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Android WebView Interface</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f0f0f0;
+        }
+        button {
+            width: 200px;
+            padding: 15px;
+            margin: 10px;
+            font-size: 16px;
+            cursor: pointer;
+            border: none;
+            border-radius: 5px;
+            background-color: #6200ea;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+
+<h1>Android WebView Interface</h1>
+<button onclick="callPlugin1()">테스트 1 호출</button>
+<button onclick="callPlugin2()">테스트 2 호출</button>
+<button onclick="callPlugin3()">테스트 3 호출</button>
+<button onclick="callPlugin4()">테스트 4 호출</button>
+<button onclick="callPlugin5()">테스트 5 호출</button>
+
+<script>
+    function callPlugin1() {
+        AndroidInterface.callPlugin1();
+    }
+
+    function callPlugin2() {
+        AndroidInterface.callPlugin2();
+    }
+
+    function callPlugin3() {
+        AndroidInterface.callPlugin3();
+    }
+
+    function callPlugin4() {
+        AndroidInterface.callPlugin4();
+    }
+
+    function callPlugin5() {
+        AndroidInterface.callPlugin5();
+    }
+</script>
+</body>
+</html>
