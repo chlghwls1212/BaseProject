@@ -3,14 +3,14 @@
      alias(libs.plugins.jetbrains.kotlin.android)
      alias(libs.plugins.dagger.hilt.android)
      kotlin("kapt")
-}
+ }
 
 android {
-    namespace = "com.example.choibaseproject"
+    namespace = "com.example.choibase"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.example.choibaseproject"
+        applicationId = "com.example.choibase"
         minSdk = 24
         targetSdk = 34
         versionCode = 1
@@ -52,7 +52,6 @@ android {
 }
 
 dependencies {
-
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
@@ -73,4 +72,8 @@ dependencies {
     kapt(libs.hiltCompiler)
     androidTestImplementation(libs.hiltAndroidTesting)
     kaptAndroidTest(libs.hiltCompiler)
+    //accompanist
+    implementation(libs.google.accompanist.permission)
+    //timber
+    implementation(libs.timber)
 }

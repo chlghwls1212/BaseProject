@@ -1,18 +1,23 @@
-package com.example.choibaseproject
+package com.example.choibase
 
+import android.Manifest
+import android.content.pm.PackageManager
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.content.ContextCompat
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.example.choibaseproject.ui.Routes
-import com.example.choibaseproject.ui.main.MainScreen
-import com.example.choibaseproject.ui.permission.PermissionScreen
-import com.example.choibaseproject.ui.splash.SplashScreen
-import com.example.choibaseproject.ui.theme.ChoiBaseTheme
+import com.example.choibase.ui.Routes
+import com.example.choibase.ui.main.MainScreen
+import com.example.choibase.ui.permission.PermissionScreen
+import com.example.choibase.ui.splash.SplashScreen
+import com.example.choibase.ui.theme.ChoiBaseTheme
 import dagger.hilt.android.AndroidEntryPoint
+import timber.log.Timber
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {

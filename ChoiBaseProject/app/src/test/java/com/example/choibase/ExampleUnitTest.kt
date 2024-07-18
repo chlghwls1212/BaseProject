@@ -1,4 +1,4 @@
-package com.example.choibaseproject
+package com.example.choibase
 
 import org.junit.Test
 

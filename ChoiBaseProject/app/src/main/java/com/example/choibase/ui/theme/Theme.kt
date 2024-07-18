@@ -1,4 +1,4 @@
-package com.example.choibaseproject.ui.theme
+package com.example.choibase.ui.theme
 
 import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme

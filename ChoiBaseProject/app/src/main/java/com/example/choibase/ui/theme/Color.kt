@@ -1,4 +1,4 @@
-package com.example.choibaseproject.ui.theme
+package com.example.choibase.ui.theme
 
 import androidx.compose.ui.graphics.Color
 

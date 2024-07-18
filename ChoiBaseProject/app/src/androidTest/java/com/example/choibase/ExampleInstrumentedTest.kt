@@ -1,4 +1,4 @@
-package com.example.choibaseproject
+package com.example.choibase
 
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.ext.junit.runners.AndroidJUnit4

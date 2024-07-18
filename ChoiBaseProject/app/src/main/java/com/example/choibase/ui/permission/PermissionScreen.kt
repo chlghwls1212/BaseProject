@@ -1,4 +1,4 @@
-package com.example.choibaseproject.ui.permission
+package com.example.choibase.ui.permission
 
 import android.content.Context
 import androidx.compose.foundation.layout.Arrangement
@@ -19,13 +19,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
-import com.example.choibaseproject.com.example.choibaseproject.ui.permission.PermissionItem
-import com.example.choibaseproject.com.example.choibaseproject.ui.permission.dangerousPermissions
-import com.example.choibaseproject.ui.Routes
-import com.example.choibaseproject.ui.custom.ButtonType
-import com.example.choibaseproject.ui.custom.SolidButton
-import com.example.choibaseproject.utils.PermissionUtils
+import com.example.choibase.ui.Routes
+import com.example.choibase.ui.custom.ButtonType
+import com.example.choibase.ui.custom.SolidButton
+import com.example.choibase.utils.PermissionUtils
+import com.example.choibase.utils.PermissionUtils.PermissionCheck
+import com.example.choibase.utils.PermissionUtils.rememberPermissionsState
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
+import com.google.accompanist.permissions.MultiplePermissionsState
 
 
 @OptIn(ExperimentalPermissionsApi::class)
@@ -34,7 +35,7 @@ fun PermissionScreen(navController: NavHostController) {
     val context = LocalContext.current
 
     val permissions = dangerousPermissions.flatMap { it.permissions }
-    val permissionsState = PermissionUtils.rememberPermissionsState(permissions)
+    val allPermissionsState = rememberPermissionsState(permissions)
 
     Column(
         modifier = Modifier
@@ -77,7 +78,7 @@ fun PermissionScreen(navController: NavHostController) {
                 text = "모든 권한 요청 하기",
                 type = ButtonType.Primary,
                 onClick = {
-                    permissionsState.launchMultiplePermissionRequest()
+                    PermissionCheck(dangerousPermissions.flatMap { it.permissions },{})
                 },
                 modifier = Modifier.weight(1f)
             )
@@ -86,8 +87,11 @@ fun PermissionScreen(navController: NavHostController) {
     }
 }
 
+@OptIn(ExperimentalPermissionsApi::class)
 @Composable
 fun PermissionItemView(permissionItem: PermissionItem, context: Context) {
+    val permissionState = rememberPermissionsState(permissions = permissionItem.permissions)
+
     Row(modifier = Modifier.heightIn(min = 100.dp)) {
         Column(
             modifier = Modifier
@@ -101,8 +105,27 @@ fun PermissionItemView(permissionItem: PermissionItem, context: Context) {
         SolidButton(
             text = "${permissionItem.name}\n 권한 요청",
             type = ButtonType.Primary,
-            onClick = { },
+            onClick = {
+//                permissionState.launchMultiplePermissionRequest()
+            },
             modifier = Modifier.weight(2f)
         )
     }
 }
+
+@OptIn(ExperimentalPermissionsApi::class)
+@Composable
+fun HandlePermission(
+    permissionState: MultiplePermissionsState,
+    onPermissionResult: (Boolean) -> Unit
+) {
+    when {
+        permissionState.allPermissionsGranted -> {
+            onPermissionResult(true)
+        }
+    }
+}
+
+
+@Composable
+fun createAllPermissionMap() = dangerousPermissions.flatMap { it.permissions }

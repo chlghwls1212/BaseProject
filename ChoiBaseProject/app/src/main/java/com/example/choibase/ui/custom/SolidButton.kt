@@ -4,6 +4,7 @@ import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -27,11 +28,13 @@ sealed class ButtonType {
 
 @Preview
 @Composable
+//기본 커스텀 버튼 프리뷰
 fun testSolidButton() {
     SolidButton("테스트 버튼", ButtonType.Primary, {})
 }
 
 @Composable
+//기본 커스텀 버튼
 fun SolidButton(
     text: String,
     type: ButtonType,
@@ -61,11 +64,10 @@ fun SolidButton(
         colors = buttonColor,
         shape = buttonShape,
         border = if (type == ButtonType.Secondary) BorderStroke(1.dp, PastelBlue) else null,
-        contentPadding = PaddingValues(8.dp),
         onClick = onClick,
         modifier = modifier
-            .padding(4.dp)
-            .heightIn(min = 50.dp),
+            .heightIn(min = 30.dp)
+            .widthIn(min = 80.dp),
     ) {
         Text(
             text = text,

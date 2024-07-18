@@ -1,4 +1,4 @@
-package com.example.choibaseproject.com.example.choibaseproject.ui.permission
+package com.example.choibase.ui.permission
 
 import android.Manifest
 
@@ -12,8 +12,11 @@ val dangerousPermissions = listOf(
     PermissionItem(
         name = "CALENDAR",
         description = "캘린더 이벤트를 읽고 쓰기 위해 해당 권한에 접근합니다.",
-        permissions = listOf(Manifest.permission.READ_CALENDAR, Manifest.permission.WRITE_CALENDAR)
-    )/*,
+        permissions = listOf(
+            Manifest.permission.READ_CALENDAR,
+            Manifest.permission.WRITE_CALENDAR
+        )
+    ),
     PermissionItem(
         name = "CALL_LOG",
         description = "통화 목록 읽고 관리하기 위해 해당 권한에 접근합니다.",
@@ -31,7 +34,10 @@ val dangerousPermissions = listOf(
     PermissionItem(
         name = "CONTACTS",
         description = "연락처를 읽고 관리하기 위해 해당 권한에 접근합니다.",
-        permissions = listOf(Manifest.permission.READ_CONTACTS, Manifest.permission.WRITE_CONTACTS)
+        permissions = listOf(
+            Manifest.permission.READ_CONTACTS,
+            Manifest.permission.WRITE_CONTACTS
+        )
     ),
     PermissionItem(
         name = "LOCATION",
@@ -79,5 +85,5 @@ val dangerousPermissions = listOf(
             Manifest.permission.READ_EXTERNAL_STORAGE,
             Manifest.permission.WRITE_EXTERNAL_STORAGE
         )
-    )*/
+    )
 )
