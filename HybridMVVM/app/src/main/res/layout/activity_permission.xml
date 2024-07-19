@@ -4,9 +4,26 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/gray"
     android:fitsSystemWindows="true"
     tools:context=".ui.splash.SplashActivity">
+
+    <LinearLayout
+        android:id="@+id/ListLayout"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:orientation="horizontal"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/buttonLayout"
+        >
+
+        <ListView
+            android:id="@+id/permissionList"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="10dp"
+            />
+
+    </LinearLayout>
 
     <LinearLayout
         android:id="@+id/buttonLayout"
@@ -14,6 +31,7 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:orientation="horizontal"
+        app:layout_constraintTop_toBottomOf="@id/ListLayout"
         app:layout_constraintBottom_toBottomOf="parent">
 
         <Button
@@ -34,4 +52,5 @@
             android:text="권한 요청">
         </Button>
     </LinearLayout>
+
 </androidx.constraintlayout.widget.ConstraintLayout>
