@@ -15,4 +15,6 @@ class MainViewModel @Inject constructor(
             // 데이터 로드 로직
         }
     }
+
+
 }

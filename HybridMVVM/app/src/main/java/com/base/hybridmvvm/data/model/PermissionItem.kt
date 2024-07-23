@@ -28,6 +28,7 @@ val requestPermissionList = listOf(
     )
 )
 
+
 val dangerousPermissions = listOf(
     PermissionItem(
         name = "CALENDAR",
@@ -96,12 +97,12 @@ val dangerousPermissions = listOf(
             Manifest.permission.RECEIVE_MMS,
         )
     ),
-    PermissionItem(
-        name = "STORAGE",
-        description = "외부 저장소에 읽고 쓰기 위해 해당 권한에 접근 합니다.",
-        permissions = listOf(
-            Manifest.permission.READ_EXTERNAL_STORAGE,
-            Manifest.permission.WRITE_EXTERNAL_STORAGE
-        )
-    )
+//    PermissionItem(
+//        name = "STORAGE",
+//        description = "외부 저장소에 읽고 쓰기 위해 해당 권한에 접근 합니다.",
+//        permissions = listOf(
+//            Manifest.permission.READ_EXTERNAL_STORAGE,
+//            Manifest.permission.WRITE_EXTERNAL_STORAGE
+//        )
+//    )
 )

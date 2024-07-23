@@ -31,31 +31,31 @@
 <body>
 
 <h1>Android WebView Interface</h1>
-<button onclick="callPlugin1()">테스트 1 호출</button>
-<button onclick="callPlugin2()">테스트 2 호출</button>
+<button onclick="showRequestPermission()">테스트 1 호출</button>
+<button onclick="showToast()">테스트 2 호출</button>
 <button onclick="callPlugin3()">테스트 3 호출</button>
 <button onclick="callPlugin4()">테스트 4 호출</button>
 <button onclick="callPlugin5()">테스트 5 호출</button>
 
 <script>
-    function callPlugin1() {
-        AndroidInterface.callPlugin1();
+    function showRequestPermission() {
+        MainAppInterface.showRequestPermission();
     }
 
-    function callPlugin2() {
-        AndroidInterface.callPlugin2();
+    function showToast() {
+        MainAppInterface.showToast("TEst");
     }
 
     function callPlugin3() {
-        AndroidInterface.callPlugin3();
+        MainAppInterface.callPlugin3();
     }
 
     function callPlugin4() {
-        AndroidInterface.callPlugin4();
+        MainAppInterface.callPlugin4();
     }
 
     function callPlugin5() {
-        AndroidInterface.callPlugin5();
+        MainAppInterface.callPlugin5();
     }
 </script>
 </body>
