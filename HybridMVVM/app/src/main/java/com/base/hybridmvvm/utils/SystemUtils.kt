@@ -6,6 +6,7 @@ import android.content.Intent
 import android.os.Build
 import android.provider.Settings
 import androidx.core.app.ActivityCompat.finishAffinity
+import timber.log.Timber
 import kotlin.system.exitProcess
 
 object SystemUtils {
@@ -35,9 +36,17 @@ object SystemUtils {
      * @param context 컨텍스트
      */
     fun openAppSettings(context: Context) {
+
+        if (context !is Activity) {
+            throw IllegalArgumentException("Context must be an Activity")
+        }
         val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
             data = android.net.Uri.fromParts("package", context.packageName, null)
         }
         context.startActivity(intent)
+
     }
+
+
+
 }

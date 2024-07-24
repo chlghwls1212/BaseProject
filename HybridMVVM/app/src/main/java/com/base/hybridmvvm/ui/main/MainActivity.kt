@@ -8,8 +8,13 @@ import android.widget.Toast
 import androidx.activity.viewModels
 import com.base.hybridmvvm.databinding.ActivityMainBinding
 import com.base.hybridmvvm.ui.base.BaseActivity
+import com.base.hybridmvvm.ui.loading.LoadingDialog
 import com.base.hybridmvvm.utils.PermissionUtils
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class MainActivity : BaseActivity() {
@@ -29,6 +34,7 @@ class MainActivity : BaseActivity() {
         webView.webViewClient = WebViewClient()
         webView.addJavascriptInterface(MainAppInterface(this, viewModel), "MainAppInterface")
         webView.loadUrl("file:///android_asset/TestPage.html")
+        
     }
 
 
