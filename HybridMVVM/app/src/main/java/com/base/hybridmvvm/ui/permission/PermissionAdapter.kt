@@ -1,6 +1,7 @@
 package com.base.hybridmvvm.ui.permission
 
 import android.app.Activity
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -47,7 +48,7 @@ class PermissionsAdapter(
         viewHolder.permissionDescription.text = permissionItem.description
 
         viewHolder.permissionButton.setOnClickListener {
-            viewModel.requestPermission(activity,permissionItem.permissions)
+            viewModel.requestPermission(activity as Context,permissionItem.permissions)
         }
 
         return view

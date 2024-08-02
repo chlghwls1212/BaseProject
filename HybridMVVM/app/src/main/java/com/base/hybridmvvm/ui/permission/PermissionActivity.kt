@@ -4,6 +4,7 @@ import android.app.AlertDialog
 import android.content.Intent
 import android.os.Bundle
 import androidx.activity.viewModels
+import androidx.lifecycle.lifecycleScope
 import com.base.hybridmvvm.data.model.dangerousPermissions
 import com.base.hybridmvvm.databinding.ActivityPermissionBinding
 import com.base.hybridmvvm.ui.base.BaseActivity
@@ -11,7 +12,10 @@ import com.base.hybridmvvm.ui.custom.PermissionDialog
 import com.base.hybridmvvm.ui.main.MainActivity
 import com.base.hybridmvvm.utils.DialogUtils
 import com.base.hybridmvvm.utils.PermissionUtils
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 
+@AndroidEntryPoint
 class PermissionActivity : BaseActivity() {
 
     private lateinit var binding: ActivityPermissionBinding
@@ -27,7 +31,6 @@ class PermissionActivity : BaseActivity() {
 
         // 리스너 등록
         setListener()
-
         // ViewModel 데이터 Observe
         observeViewModel()
     }
@@ -52,17 +55,33 @@ class PermissionActivity : BaseActivity() {
         viewModel.deniedPermissions.observe(this) { deniedPermissions ->
             showPermissionRationale(deniedPermissions)
         }
+
+        viewModel.showRationaleDialog.observe(this) { rationaleData ->
+            rationaleData?.let {
+                showPermissionRationaleDialog(it.deniedPermissions, it.showRationale)
+            }
+        }
     }
 
     private fun showPermissionRationale(deniedPermissions: List<String>) {
-        val rationalePermissions = PermissionUtils.getRationalePermissions(deniedPermissions)
-        val showRationale = deniedPermissions.any { permission ->
-            viewModel.shouldShowRationale(this, permission)
+        lifecycleScope.launch {
+            val showRationale = deniedPermissions.any { permission ->
+                viewModel.shouldShowRationale(this@PermissionActivity, permission)
+            }
+            viewModel.onRationaleCalculated(deniedPermissions, showRationale)
         }
+    }
+
+    private fun showPermissionRationaleDialog(
+        deniedPermissions: List<String>,
+        showRationale: Boolean
+    ) {
+        val rationalePermissions = PermissionUtils.getRationalePermissions(deniedPermissions)
+
         DialogUtils.showPermissionDialog(
             context = this,
-            title = "권한요청",
-            content = "필수 $rationalePermissions 권한이 수락되지 않았습니다.",
+            title = "권한 요청",
+            content = "필수 $rationalePermissions 권한이 허용 되지 않았습니다.",
             positiveButtonText = if (showRationale) "확인" else "환경 설정",
             onPositiveButtonClick = {
                 if (showRationale) {
@@ -74,20 +93,6 @@ class PermissionActivity : BaseActivity() {
             negativeButtonText = "취소",
             onNegativeButtonClick = {},
         )
-
-//        AlertDialog.Builder(this)
-//            .setTitle("권한요청")
-//            .setMessage("필수 $rationalePermissions 권한이 수락되지 않았습니다.")
-//            .setPositiveButton(if (showRationale) "확인" else "환경 설정") { _, _ ->
-//                if (showRationale) {
-//                    viewModel.requestPermission(this, deniedPermissions)
-//                } else {
-//                    viewModel.openAppSettings(this)
-//                }
-//            }
-//            .setNegativeButton("취소") { _, _ -> }
-//            .create()
-//            .show()
     }
 
     private fun onPermissionsGranted() {

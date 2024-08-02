@@ -12,7 +12,12 @@ object PreferenceUtils {
         return context.getSharedPreferences(name, Context.MODE_PRIVATE)
     }
 
-    fun putString(context: Context, key: String, value: String, prefName: String? = null) {
+    fun putString(
+        context: Context,
+        key: String,
+        value: String,
+        prefName: String? = DEFAULT_PREF_NAME
+    ) {
         val preferences = getPreferences(context, prefName)
         val editor = preferences.edit()
         editor.putString(key, value)
@@ -23,7 +28,7 @@ object PreferenceUtils {
         context: Context,
         key: String,
         defaultValue: String? = null,
-        prefName: String? = null
+        prefName: String? = DEFAULT_PREF_NAME
     ): String? {
         val preferences = getPreferences(context, prefName)
         return preferences.getString(key, defaultValue)

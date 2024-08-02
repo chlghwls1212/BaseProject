@@ -11,8 +11,6 @@ import androidx.core.os.BuildCompat
 import com.base.hybridmvvm.utils.PermissionUtils
 
 abstract class BaseActivity : AppCompatActivity() {
-
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         // 공통 초기화 코드
@@ -22,12 +20,11 @@ abstract class BaseActivity : AppCompatActivity() {
             onBackInvokedDispatcher.registerOnBackInvokedCallback(
                 OnBackInvokedDispatcher.PRIORITY_DEFAULT
             ) {
-                // Back is pressed... Finishing the activity
             }
+
         } else {
             onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
                 override fun handleOnBackPressed() {
-                    // Back is pressed... Finishing the activity
                     finish()
                 }
             })

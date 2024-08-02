@@ -15,8 +15,8 @@ object SystemUtils {
      * 앱을 백그라운드로 전환시킵니다.
      * @param activity 현재 액티비티
      */
-    fun moveAppToBackground(activity: Activity) {
-        activity.moveTaskToBack(true)
+    fun moveAppToBackground(context: Context) {
+        (context as Activity).moveTaskToBack(true)
     }
 
     /**
@@ -24,9 +24,9 @@ object SystemUtils {
      * 백그라운드 태스크까지 정리하여 앱을 종료합니다.
      * @param activity 현재 액티비티
      */
-    fun exitApp(activity: Activity) {
-        activity.finishAffinity() // 현재 액티비티와 같은 태스크에 있는 모든 액티비티 종료
-        activity.finishAndRemoveTask() // 태스크를 백 스택에서 제거 (API 21 이상)
+    fun exitApp(context: Context) {
+        (context as Activity).finishAffinity() // 현재 액티비티와 같은 태스크에 있는 모든 액티비티 종료
+        context.finishAndRemoveTask() // 태스크를 백 스택에서 제거 (API 21 이상)
         exitProcess(0) // JVM 프로세스를 종료
     }
 
@@ -44,9 +44,5 @@ object SystemUtils {
             data = android.net.Uri.fromParts("package", context.packageName, null)
         }
         context.startActivity(intent)
-
     }
-
-
-
 }

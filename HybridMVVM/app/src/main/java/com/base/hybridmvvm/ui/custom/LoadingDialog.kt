@@ -1,4 +1,4 @@
-package com.base.hybridmvvm.ui.loading
+package com.base.hybridmvvm.ui.custom
 
 import android.app.Dialog
 import android.content.Context
@@ -15,6 +15,14 @@ class LoadingDialog private constructor(context: Context) : Dialog(context) {
 
     init {
         setCancelable(false)
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        binding = LoadingDialogBinding.inflate(LayoutInflater.from(context))
+
+        setContentView(binding.root)
+
         window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
         window?.setLayout(
             WindowManager.LayoutParams.MATCH_PARENT,
@@ -22,13 +30,6 @@ class LoadingDialog private constructor(context: Context) : Dialog(context) {
         )
         window?.clearFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND)
     }
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        binding = LoadingDialogBinding.inflate(LayoutInflater.from(context))
-        setContentView(binding.root)
-    }
-
 
     companion object {
         @Volatile

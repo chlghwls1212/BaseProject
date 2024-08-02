@@ -2,9 +2,7 @@ package com.base.hybridmvvm.utils
 
 import android.app.Activity
 import android.content.Context
-import android.content.Intent
 import android.content.pm.PackageManager
-import android.provider.Settings
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 
@@ -14,12 +12,12 @@ private var onResultCallback: ((Boolean, List<String>) -> Unit)? = null
 
 object PermissionUtils {
     fun checkAndRequestPermissions(
-        activity: Activity,
+        context: Context,
         permissions: List<String>,
         onResult: (Boolean, List<String>) -> Unit
     ) {
         val deniedPermissions = permissions.filter {
-            ContextCompat.checkSelfPermission(activity, it) != PackageManager.PERMISSION_GRANTED
+            ContextCompat.checkSelfPermission(context, it) != PackageManager.PERMISSION_GRANTED
         }
 
         if (deniedPermissions.isEmpty()) {
@@ -27,7 +25,7 @@ object PermissionUtils {
         } else {
             onResultCallback = onResult
             ActivityCompat.requestPermissions(
-                activity,
+                context as Activity,
                 deniedPermissions.toTypedArray(),
                 REQUEST_CODE_PERMISSIONS
             )
@@ -58,8 +56,8 @@ object PermissionUtils {
             getManifestPermissionName(permission)
         }
 
-    fun shouldShowRationale(activity: Activity, permission: String): Boolean {
-        return ActivityCompat.shouldShowRequestPermissionRationale(activity, permission)
+    fun shouldShowRationale(context: Context, permission: String): Boolean {
+        return ActivityCompat.shouldShowRequestPermissionRationale(context as Activity, permission)
     }
 
     /**

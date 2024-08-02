@@ -1,6 +1,8 @@
 package com.base.hybridmvvm.data.model
 
 import android.Manifest
+import android.media.Image
+import android.os.Build
 
 data class PermissionItem(
     val name: String,
@@ -28,6 +30,19 @@ val requestPermissionList = listOf(
     )
 )
 
+val ImagePermission = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+    arrayOf(
+        Manifest.permission.CAMERA,
+        Manifest.permission.READ_MEDIA_IMAGES
+    ).toList()
+} else {
+    arrayOf(Manifest.permission.CAMERA).toList()
+}
+
+val locationPermission = listOf(
+    Manifest.permission.ACCESS_FINE_LOCATION,
+    Manifest.permission.ACCESS_COARSE_LOCATION
+)
 
 val dangerousPermissions = listOf(
     PermissionItem(
@@ -85,6 +100,11 @@ val dangerousPermissions = listOf(
     PermissionItem(
         name = "SENSOR",
         description = "생체정보를 읽기 위해 해당 권한에 접근 합니다.",
+        permissions = listOf(Manifest.permission.BODY_SENSORS)
+    ),
+    PermissionItem(
+        name = "CALENDAR",
+        description = "캘린더를 관리하기 위해 해당 권한에 접근 합니다.",
         permissions = listOf(Manifest.permission.READ_CALENDAR, Manifest.permission.WRITE_CALENDAR)
     ),
     PermissionItem(
