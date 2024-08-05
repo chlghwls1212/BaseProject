@@ -6,6 +6,7 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
+import android.webkit.WebSettings
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import android.widget.Button
@@ -23,6 +24,7 @@ import com.base.hybridmvvm.utils.CalendarUtils
 import com.base.hybridmvvm.utils.DialogUtils
 import com.base.hybridmvvm.utils.ImageUtils
 import com.base.hybridmvvm.utils.PermissionUtils
+import com.base.hybridmvvm.utils.SystemUtils
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -34,6 +36,7 @@ import java.util.Locale
 
 @AndroidEntryPoint
 class MainActivity : BaseActivity() {
+    private val mainAppInterfaceName = "MainAppInterface"
 
     private lateinit var binding: ActivityMainBinding
     private val viewModel: MainViewModel by viewModels()
@@ -58,14 +61,20 @@ class MainActivity : BaseActivity() {
 
     @SuppressLint("SetJavaScriptEnabled")
     private fun setWebView() {
+        /**
+         * 웹뷰 지연 로딩일 경우 백화현상 테스트를 위해.
+         */
+        binding.mainWebView.settings.cacheMode = WebSettings.LOAD_NO_CACHE
+
         val webView: WebView = binding.mainWebView
         webView.settings.javaScriptEnabled = true
         webView.webViewClient = WebViewClient()
         webView.addJavascriptInterface(
             MainAppInterface(this, webView, viewModel, sharedViewModel, this),
-            "MainAppInterface"
+            mainAppInterfaceName
         )
         webView.loadUrl("file:///android_asset/TestPage.html")
+//        webView.loadUrl("https://stackoverflow.com/")
 
     }
 
@@ -87,6 +96,10 @@ class MainActivity : BaseActivity() {
 
         viewModel.base64Image.observe(this) { base64Image ->
             callbackScript("handlePhotoUri", base64Image)
+        }
+
+        viewModel.shareContent.observe(this) { content ->
+            SystemUtils.shareContent(this, content.subject, content.text, content.chooserTitle)
         }
     }
 
@@ -190,6 +203,10 @@ class MainActivity : BaseActivity() {
         dialog.show()
     }
 
+    override fun onDestroy() {
+        binding.mainWebView.removeJavascriptInterface(mainAppInterfaceName)
+        super.onDestroy()
+    }
 
     private fun callbackScript(callbackName: String, data: String) {
         binding.mainWebView.evaluateJavascript("javascript:$callbackName('$data')", null)

@@ -7,6 +7,7 @@ import androidx.lifecycle.LifecycleOwner
 import com.base.hybridmvvm.data.model.ImagePermission
 import com.base.hybridmvvm.data.model.dangerousPermissions
 import com.base.hybridmvvm.data.model.locationPermission
+import com.base.hybridmvvm.ui.base.BaseViewModel
 import com.base.hybridmvvm.ui.base.SharedViewModel
 import com.base.hybridmvvm.ui.custom.LoadingDialog
 import com.base.hybridmvvm.utils.DeviceInfoUtils
@@ -20,6 +21,18 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
+/**
+ * MainAppInterface
+ *
+ * 비즈니스 로직이 필요한 경우 혹은 데이터의 조작 및 업데이트가 필요 할 경우 ViewModel을 경유,
+ * 이 외의 경우 단순 UI 업데이트 경우 바로 View 에서 호출.
+ *
+ * @property context
+ * @property webView
+ * @property viewModel
+ * @property sharedViewModel
+ * @property lifecycleOwner
+ */
 class MainAppInterface(
     private val context: Context,
     private val webView: WebView,
@@ -34,7 +47,7 @@ class MainAppInterface(
     }
 
     @JavascriptInterface
-    fun showToast(message: String) {
+    fun showToast(message: String, durationTime: Int) {
         ToastUtils.showToast(
             context,
             "긴단어가 나와야하는걸 왜 모르는거니단어가 나와야하는걸 왜 모르는거니단어가 나와야하는걸 왜 모르는거니",
@@ -45,6 +58,7 @@ class MainAppInterface(
 
     @JavascriptInterface
     fun showLoading() {
+        //테스트용으로 생성 후 삭제
         CoroutineScope(Dispatchers.Main).launch {
             LoadingDialog.showLoading(context)
             delay(3000)
@@ -53,16 +67,12 @@ class MainAppInterface(
     }
 
     @JavascriptInterface
-    fun doSomething(data: String) {
-        // ViewModel을 사용하여 데이터 처리
-        viewModel.loadData()
-    }
-
-    @JavascriptInterface
     fun getDeviceInfo() {
+        val deviceInfo = DeviceInfoUtils.getDeviceInfo(context)
+
         ToastUtils.showToast(
             context,
-            DeviceInfoUtils.getDeviceInfo(context).toString(),
+            deviceInfo.toString(),
             3000,
             true
         )
@@ -93,7 +103,7 @@ class MainAppInterface(
         viewModel.requestPermission(context, locationPermission)
 
         CoroutineScope(Dispatchers.Main).launch {
-            viewModel.permissionsGranted.observeForever { granted ->
+            viewModel.permissionsGranted.observe(lifecycleOwner) { granted ->
                 if (granted) {
                     LocationUtils.getLastLocation(context) {
                         ToastUtils.showToast(context, it.toString())
@@ -128,15 +138,42 @@ class MainAppInterface(
     }
 
     @JavascriptInterface
+    fun showCalendar() {
+        viewModel.requestCalendarEvents()
+    }
+
+    @JavascriptInterface
+    fun sendSMS(
+        phoneNumber: String,
+        message: String,
+        chooserTitle: String? = "문자 메시지 보내기"
+    ) {
+        SystemUtils.sendSMS(context, phoneNumber, message, chooserTitle)
+    }
+
+    @JavascriptInterface
+    fun phoneCall(phoneNumber: String) {
+        SystemUtils.makePhoneCall(context, phoneNumber)
+    }
+
+    /**
+     *  데이터 모델 사용 예시 함수.
+     *  MainAppInterface 의 규칙에 따라 간단한 UI update등 간단한 함수는 ViewModel을 경유하지 아니한다.
+     */
+    @JavascriptInterface
+    fun makeShareContent(
+        subject: String,
+        text: String,
+        chooserTitle: String? = "공유하기"
+    ) {
+        viewModel.shareContent(subject, text, chooserTitle)
+    }
+
+    @JavascriptInterface
     fun callbackScript(callback: String, json: String) {
         webView.post {
             webView.evaluateJavascript("javascript:$callback('$json')", null)
         }
-    }
-
-    @JavascriptInterface
-    fun showCalendar(){
-        viewModel.requestCalendarEvents()
     }
 
 }

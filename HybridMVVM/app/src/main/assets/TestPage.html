@@ -34,39 +34,35 @@
             MainAppInterface.showToast("TEst");
         }
 
-        function callPlugin3() {
+        function showLoading() {
             MainAppInterface.showLoading();
         }
 
-        function callPlugin4() {
+        function getDeviceInfo() {
             MainAppInterface.getDeviceInfo();
         }
 
-        function callPlugin5() {
-            MainAppInterface.callPlugin5();
-        }
-
-        function callPlugin6() {
+        function setPrefString() {
             MainAppInterface.setPrefString();
         }
 
-        function callPlugin7() {
+        function getPrefString() {
             MainAppInterface.getPrefString();
         }
 
-        function callPlugin8() {
+        function exitApp() {
             MainAppInterface.exitApp();
         }
 
-        function callPlugin9() {
+        function getLocationWithGPS() {
             MainAppInterface.getLocationWithGPS();
         }
 
-        function callPlugin10() {
+        function getPicImage() {
             MainAppInterface.getPicImage(false, true);
         }
 
-         function showCalendar() {
+        function showCalendar() {
             MainAppInterface.showCalendar();
         }
 
@@ -79,6 +75,18 @@
             var popupImage = document.getElementById('popupImage');
             popupImage.src = 'data:image/jpeg;base64,' + base64Image;
             popup.style.display = 'block';
+        }
+
+        function sendSMS(){
+            MainAppInterface.sendSMS("01051453699","TestMessage","chooserTitle")
+        }
+
+        function makePhoneCall(){
+            MainAppInterface.makePhoneCall("01051453699")
+        }
+
+        function shareContent(){
+            MainAppInterface.shareContent("공유하기","공유하기메시지","공유하기 제목")
         }
 
         function closePopup() {
@@ -98,10 +106,23 @@
             margin: 0;
             background-color: #f0f0f0;
         }
+        .button-container {
+            width: 100%;
+            max-width: 240px;
+            overflow-y: auto;
+            height: 90vh; /* Adjust height to allow scrolling */
+            padding: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            background-color: white;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
         button {
             width: 200px;
             padding: 15px;
-            margin: 10px;
+            margin: 10px 0;
             font-size: 16px;
             cursor: pointer;
             border: none;
@@ -166,22 +187,24 @@
 <body>
 
 <h1>Android WebView Interface</h1>
-<button onclick="showRequestPermission()">테스트 1 호출</button>
-<button onclick="showToast()">테스트 2 호출</button>
-<button onclick="callPlugin3()">테스트 3 호출</button>
-<button onclick="callPlugin4()">테스트 4 호출</button>
-<button onclick="callPlugin5()">테스트 5 호출</button>
-<button onclick="callPlugin6()">테스트 6 호출</button>
-<button onclick="callPlugin7()">테스트 7 호출</button>
-<button onclick="callPlugin8()">테스트 8 호출</button>
-<button onclick="callPlugin9()">GPS 테스트 호출</button>
-<button onclick="callPlugin10()">사진 촬영 호출</button>
-<button onclick="showCalendar()">캘린더 호출</button>
+<div class="button-container">
+    <button onclick="showRequestPermission()">showRequestPermission</button>
+    <button onclick="showToast()">showToast</button>
+    <button onclick="showLoading()">showLoading</button>
+    <button onclick="getDeviceInfo()">getDeviceInfo</button>
+    <button onclick="setPrefString()">setPrefString</button>
+    <button onclick="getPrefString()">getPrefString</button>
+    <button onclick="exitApp()">exitApp</button>
+    <button onclick="sendSMS()">sendSMS</button>
+    <button onclick="makePhoneCall()">makePhoneCall</button>
+    <button onclick="shareContent()">shareContent</button>
+
+</div>
 
 <div class="cPopup" id="imagePopup">
     <div class="cPopupContent">
         <button class="closeButton" id="closeButton" onclick="closePopup()">X</button>
-        <img class="cPopupImage"  id="popupImage" src="" alt="Selected Image">
+        <img class="cPopupImage" id="popupImage" src="" alt="Selected Image">
     </div>
 </div>
 

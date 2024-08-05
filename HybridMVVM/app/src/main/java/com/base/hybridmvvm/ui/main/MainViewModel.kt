@@ -6,7 +6,7 @@ import android.net.Uri
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.base.hybridmvvm.BaseApplication
+import com.base.hybridmvvm.data.model.ShareContent
 import com.base.hybridmvvm.ui.base.BaseViewModel
 import com.base.hybridmvvm.utils.CalendarEvent
 import com.base.hybridmvvm.utils.CalendarUtils
@@ -25,11 +25,8 @@ class MainViewModel @Inject constructor(application: Application) : BaseViewMode
     private val _base64Image = MutableLiveData<String>()
     val base64Image: LiveData<String> = _base64Image
 
-    fun loadData() {
-        viewModelScope.launch {
-            // 데이터 로드 로직
-        }
-    }
+    private val _shareContent = MutableLiveData<ShareContent>()
+    val shareContent: LiveData<ShareContent> = _shareContent
 
     fun requestCalendarEvents() {
         loadCalendarEvents()
@@ -47,6 +44,16 @@ class MainViewModel @Inject constructor(application: Application) : BaseViewMode
             val bitmap = ImageUtils.uriToBitmap(context, uri)
             val base64Image = ImageUtils.bitmapToBase64(bitmap)
             _base64Image.postValue(base64Image)
+        }
+    }
+
+    fun shareContent(
+        subject: String,
+        text: String,
+        chooserTitle: String? = "공유하기"
+    ) {
+        viewModelScope.launch {
+            _shareContent.postValue(ShareContent(subject, text, chooserTitle))
         }
     }
 }
