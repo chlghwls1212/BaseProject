@@ -18,12 +18,15 @@ class PermissionsAdapter(
     private val viewModel: PermissionViewModel
 ) : BaseAdapter() {
 
+    // permissions가 비어 있지 않은 항목만 필터링
+    private val filteredPermissionsList = permissionsList.filter { it.permissions.isNotEmpty() }
+
     override fun getCount(): Int {
-        return permissionsList.size
+        return filteredPermissionsList.size
     }
 
     override fun getItem(position: Int): Any {
-        return permissionsList[position]
+        return filteredPermissionsList[position]
     }
 
     override fun getItemId(position: Int): Long {
@@ -35,7 +38,8 @@ class PermissionsAdapter(
         val viewHolder: ViewHolder
 
         if (convertView == null) {
-            view = LayoutInflater.from(activity).inflate(R.layout.item_permission_list, parent, false)
+            view =
+                LayoutInflater.from(activity).inflate(R.layout.item_permission_list, parent, false)
             viewHolder = ViewHolder(view)
             view.tag = viewHolder
         } else {
@@ -43,12 +47,15 @@ class PermissionsAdapter(
             viewHolder = view.tag as ViewHolder
         }
 
-        val permissionItem = permissionsList[position]
+        val permissionItem = filteredPermissionsList[position]
         viewHolder.permissionName.text = permissionItem.name
         viewHolder.permissionDescription.text = permissionItem.description
 
+        /** 미지원 권한 노출 시, 해당 버튼 비 활성화 설정 */
+//        viewHolder.permissionButton.isEnabled = permissionItem.permissions.isNotEmpty()
+
         viewHolder.permissionButton.setOnClickListener {
-            viewModel.requestPermission(activity as Context,permissionItem.permissions)
+            viewModel.requestPermission(activity as Context, permissionItem.permissions)
         }
 
         return view

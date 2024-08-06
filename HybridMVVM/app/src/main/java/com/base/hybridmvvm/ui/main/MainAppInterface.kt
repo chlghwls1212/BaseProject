@@ -4,10 +4,9 @@ import android.content.Context
 import android.webkit.JavascriptInterface
 import android.webkit.WebView
 import androidx.lifecycle.LifecycleOwner
-import com.base.hybridmvvm.data.model.ImagePermission
 import com.base.hybridmvvm.data.model.dangerousPermissions
 import com.base.hybridmvvm.data.model.locationPermission
-import com.base.hybridmvvm.ui.base.BaseViewModel
+import com.base.hybridmvvm.data.model.storagePermission
 import com.base.hybridmvvm.ui.base.SharedViewModel
 import com.base.hybridmvvm.ui.custom.LoadingDialog
 import com.base.hybridmvvm.utils.DeviceInfoUtils
@@ -16,7 +15,6 @@ import com.base.hybridmvvm.utils.PreferenceUtils
 import com.base.hybridmvvm.utils.SystemUtils
 import com.base.hybridmvvm.utils.ToastUtils
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -41,8 +39,12 @@ class MainAppInterface(
     private val lifecycleOwner: LifecycleOwner
 ) {
     @JavascriptInterface
-    fun showRequestPermission() {
-        val permissionsList = dangerousPermissions.flatMap { it.permissions }
+    fun showRequestPermission(permCategory: String) {
+
+        val permissionsList = dangerousPermissions
+            .filter { it.name.equals(permCategory, ignoreCase = true) }
+            .flatMap { it.permissions }
+
         viewModel.requestPermission(context, permissionsList)
     }
 
@@ -116,7 +118,7 @@ class MainAppInterface(
 
     @JavascriptInterface
     fun getPicImage(isCapture: Boolean = true, isSingle: Boolean = true) {
-        viewModel.requestPermission(context, ImagePermission)
+        viewModel.requestPermission(context, storagePermission)
 
         CoroutineScope(Dispatchers.Main).launch {
             viewModel.permissionsGranted.observe(lifecycleOwner) { granted ->

@@ -26,9 +26,7 @@ open class BaseViewModel(application: Application) : AndroidViewModel(applicatio
         job.cancel()
     }
 
-    /**
-     * Permission Area
-     */
+    /** Start Permission Area */
     private val _permissionsGranted = MutableLiveData<Boolean>()
     val permissionsGranted: LiveData<Boolean> get() = _permissionsGranted
 
@@ -37,7 +35,6 @@ open class BaseViewModel(application: Application) : AndroidViewModel(applicatio
 
     private val _showRationaleDialog = MutableLiveData<RationaleData?>()
     val showRationaleDialog: LiveData<RationaleData?> = _showRationaleDialog
-
 
     fun requestPermission(context: Context, permissionList: List<String> = listOf()) {
         val requestPermList = permissionList.ifEmpty {
@@ -66,4 +63,6 @@ open class BaseViewModel(application: Application) : AndroidViewModel(applicatio
     }
 
     data class RationaleData(val deniedPermissions: List<String>, val showRationale: Boolean)
+
+    /** EndPermission Area */
 }
