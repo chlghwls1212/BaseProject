@@ -73,9 +73,9 @@ class MainActivity : BaseActivity() {
             MainAppInterface(this, webView, viewModel, sharedViewModel, this),
             mainAppInterfaceName
         )
+
         webView.loadUrl("file:///android_asset/TestPage.html")
 //        webView.loadUrl("https://stackoverflow.com/")
-
     }
 
     private fun observeViewModel() {
