@@ -3,6 +3,7 @@ package com.base.hybridmvvm.ui.splash
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
+import android.webkit.WebView
 import androidx.activity.viewModels
 import com.base.hybridmvvm.databinding.ActivitySplashBinding
 import com.base.hybridmvvm.ui.base.BaseActivity
@@ -30,6 +31,10 @@ class SplashActivity : BaseActivity() {
         binding = ActivitySplashBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+//        webView = WebView(this).apply {
+//            loadUrl("https://stackoverflow.com/")
+//        }
+
         viewModel.splashResponse.observe(this) { response ->
             response?.let {
                 if (!it.serverStatus)
@@ -44,7 +49,6 @@ class SplashActivity : BaseActivity() {
         }
 
         GlobalScope.launch {
-
             delay(2000) // 스플래시 화면 2초 대기
             withContext(Dispatchers.Main) {
                 val intent = Intent(this@SplashActivity, PermissionActivity::class.java)

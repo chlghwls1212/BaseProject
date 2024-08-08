@@ -3,7 +3,11 @@ package com.base.hybridmvvm.ui.main
 import android.annotation.SuppressLint
 import android.app.Dialog
 import android.content.Intent
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.graphics.Color
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.webkit.WebSettings
@@ -20,15 +24,12 @@ import com.base.hybridmvvm.databinding.ActivityMainBinding
 import com.base.hybridmvvm.ui.base.BaseActivity
 import com.base.hybridmvvm.ui.base.SharedViewModel
 import com.base.hybridmvvm.utils.CalendarEvent
-import com.base.hybridmvvm.utils.CalendarUtils
 import com.base.hybridmvvm.utils.DialogUtils
-import com.base.hybridmvvm.utils.ImageUtils
 import com.base.hybridmvvm.utils.PermissionUtils
 import com.base.hybridmvvm.utils.SystemUtils
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import java.io.File
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Date
@@ -55,6 +56,18 @@ class MainActivity : BaseActivity() {
         observeViewModel()
         // Launcher 관련 initialize
         initializeActivityResultLaunchers()
+
+        // 화면 캡처 이미지 표시
+        val filePath = intent.getStringExtra("SCREENSHOT_PATH")
+
+        filePath?.let {
+            val file = File(it)
+            if (file.exists()) {
+                val bitmap = BitmapFactory.decodeFile(it)
+                binding.splashImageView.setImageBitmap(bitmap)
+            }
+        }
+
         // 웹뷰 설정
         setWebView()
     }
@@ -64,18 +77,26 @@ class MainActivity : BaseActivity() {
         /**
          * 웹뷰 지연 로딩일 경우 백화현상 테스트를 위해.
          */
-        binding.mainWebView.settings.cacheMode = WebSettings.LOAD_NO_CACHE
+//        binding.mainWebView.settings.cacheMode = WebSettings.LOAD_NO_CACHE
 
-        val webView: WebView = binding.mainWebView
+        val webView = binding.mainWebView
         webView.settings.javaScriptEnabled = true
-        webView.webViewClient = WebViewClient()
+        webView.webViewClient = object : WebViewClient() {
+            override fun onPageFinished(view: WebView?, url: String?) {
+                super.onPageFinished(view, url)
+                // 로딩 완료 시 캡처 이미지 제거
+                binding.splashImageView.setImageBitmap(null)
+            }
+        }
         webView.addJavascriptInterface(
             MainAppInterface(this, webView, viewModel, sharedViewModel, this),
             mainAppInterfaceName
         )
 
-        webView.loadUrl("file:///android_asset/TestPage.html")
-//        webView.loadUrl("https://stackoverflow.com/")
+//        webView.loadUrl("file:///android_asset/TestPage.html")
+//        webView.settings.cacheMode = WebSettings.LOAD_CACHE_ELSE_NETWORK
+        webView.loadUrl("https://stackoverflow.com/")
+//        webView.loadUrl("https://naver.com")
     }
 
     private fun observeViewModel() {
