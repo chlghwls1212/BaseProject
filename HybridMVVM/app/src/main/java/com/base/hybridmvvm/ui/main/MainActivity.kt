@@ -29,6 +29,7 @@ import com.base.hybridmvvm.utils.PermissionUtils
 import com.base.hybridmvvm.utils.SystemUtils
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import java.io.File
 import java.text.SimpleDateFormat
 import java.util.Calendar
@@ -58,7 +59,7 @@ class MainActivity : BaseActivity() {
         initializeActivityResultLaunchers()
 
         // 화면 캡처 이미지 표시
-        val filePath = intent.getStringExtra("SCREENSHOT_PATH")
+        val filePath = intent.getStringExtra(SCREEN_PATH)
 
         filePath?.let {
             val file = File(it)
@@ -213,7 +214,7 @@ class MainActivity : BaseActivity() {
 
             eventsOnSelectedDate.forEach {
                 // 뷰 연동 시 캘린더 커스텀 필요 ( 시간소요 이슈 )
-                Log.d("날짜별 정보", "제목: ${it.title}, 설명: ${it.description}")
+                Timber.d("날짜별 정보", "제목: ${it.title}, 설명: ${it.description}")
             }
         }
 

@@ -11,7 +11,6 @@ import android.view.PixelCopy
 import android.view.View
 import android.window.OnBackInvokedDispatcher
 import androidx.activity.OnBackPressedCallback
-import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityOptionsCompat
 import androidx.lifecycle.lifecycleScope
@@ -21,12 +20,18 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlinx.coroutines.withContext
+import timber.log.Timber
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
 import kotlin.coroutines.resumeWithException
 
 abstract class BaseActivity : AppCompatActivity() {
+
+    companion object {
+        const val SCREEN_CAPTURE = "screenshot.png"
+        const val SCREEN_PATH = "SCREENSHOT_PATH"
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -67,7 +72,7 @@ abstract class BaseActivity : AppCompatActivity() {
 
     /**
      * captureAndTransitionToActivity
-     * 현재 화면을 캡처하고 대상 액티비티로 전환합니다.
+     * 현재 화면을 캡처하고 대상 액티비티로 전환
      * @param targetActivity 전환할 대상 액티비티 클래스
      */
     fun captureAndTransitionToActivity(targetActivity: Class<out AppCompatActivity>) {
@@ -75,22 +80,25 @@ abstract class BaseActivity : AppCompatActivity() {
             val bitmap = captureScreenWithPixelCopy()
             if (bitmap != null) {
                 val filePath = saveBitmapToFile(bitmap)
-                transitionToActivity(targetActivity, filePath)
+                transitionToActivityWithPath(targetActivity, filePath)
             } else {
-                Log.e("BaseActivity", "Failed to capture screen.")
+                Timber.tag("BaseActivity").e("Failed to capture screen.")
             }
         }
     }
 
     /**
      * transitionToActivity
-     * 캡처된 스크린샷과 함께 지정된 액티비티로 전환합니다.
+     * 캡처된 스크린샷과 함께 지정된 액티비티로 전환
      * @param targetActivity 전환할 대상 액티비티 클래스
      * @param filePath 캡처된 스크린샷 파일 경로
      */
-    private fun transitionToActivity(targetActivity: Class<out AppCompatActivity>, filePath: String?) {
+    private fun transitionToActivityWithPath(
+        targetActivity: Class<out AppCompatActivity>,
+        filePath: String?
+    ) {
         val intent = Intent(this, targetActivity).apply {
-            putExtra("SCREENSHOT_PATH", filePath)
+            putExtra(SCREEN_PATH, filePath)
         }
         val options = ActivityOptionsCompat.makeCustomAnimation(this, 0, 0)
         startActivity(intent, options.toBundle())
@@ -99,7 +107,7 @@ abstract class BaseActivity : AppCompatActivity() {
 
     /**
      * captureScreenWithPixelCopy
-     * PixelCopy를 사용하여 현재 화면을 캡처합니다.
+     * PixelCopy를 사용하여 현재 화면을 캡처
      * @return 캡처된 비트맵, 캡처 실패 시 null 반환
      */
     @OptIn(ExperimentalCoroutinesApi::class)
@@ -107,7 +115,8 @@ abstract class BaseActivity : AppCompatActivity() {
         return withContext(Dispatchers.Main) {
             try {
                 val rootView: View = window.decorView.rootView
-                val bitmap = Bitmap.createBitmap(rootView.width, rootView.height, Bitmap.Config.ARGB_8888)
+                val bitmap =
+                    Bitmap.createBitmap(rootView.width, rootView.height, Bitmap.Config.ARGB_8888)
                 suspendCancellableCoroutine { cont ->
                     PixelCopy.request(window, bitmap, { copyResult ->
                         if (copyResult == PixelCopy.SUCCESS) {
@@ -126,13 +135,13 @@ abstract class BaseActivity : AppCompatActivity() {
 
     /**
      * saveBitmapToFile
-     * 캡처된 비트맵을 파일에 저장합니다.
+     * 캡처된 비트맵을 파일에 저장
      * @param bitmap 저장할 비트맵
      * @return 저장된 비트맵 파일 경로, 저장 실패 시 null 반환
      */
     private fun saveBitmapToFile(bitmap: Bitmap): String? {
         return try {
-            val file = File(getExternalFilesDir(null), "screenshot.png")
+            val file = File(getExternalFilesDir(null), SCREEN_CAPTURE)
             FileOutputStream(file).use { out ->
                 bitmap.compress(Bitmap.CompressFormat.PNG, 100, out)
             }
@@ -142,4 +151,6 @@ abstract class BaseActivity : AppCompatActivity() {
             null
         }
     }
+
+
 }
