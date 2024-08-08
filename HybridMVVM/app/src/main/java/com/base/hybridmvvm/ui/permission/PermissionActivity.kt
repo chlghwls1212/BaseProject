@@ -101,8 +101,7 @@ class PermissionActivity : BaseActivity() {
     }
 
     private fun navigateToMain() {
-        val intent = Intent(this, MainActivity::class.java)
-        startActivity(intent)
-        finish()
+        // 현재 화면을 캡처하고 대상 액티비티로 전달
+        captureAndTransitionToActivity(MainActivity::class.java)
     }
 }

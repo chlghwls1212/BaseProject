@@ -8,8 +8,11 @@ import android.os.Build
  * minSdk 23,Android 6 이후 권한
  * 호출 불 가능한 권한 요청 시 emptyList() 로 반환
  *
- * 권한 변경 대응 방법
- * 미 사용 권한 : 현 위치 의 권한 삭제, AndroidManifest.xml 내부 해당 권한 삭제.
+ * 미 사용 권한 변경 대응 방법 :
+ *  - 현 위치 의 권한 삭제
+ *  - AndroidManifest.xml 내부 해당 권한 삭제
+ *  - 공통 유틸 중 viewModel.requestPermission(context,권한) 으로 사용 되고 있는 함수 삭제
+ *
  * 권한 거부 로직 : BaseViewModel의 LiveData인 아래 변수 observe 이후 컨트롤
  *  - permissionsGranted : 모든 권한 수락
  *  - deniedPermissions : 권한 거절 (1건이상)
